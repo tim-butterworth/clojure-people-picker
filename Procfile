@@ -1,1 +1,1 @@
-web: java $JVM_OPTS -cp target/people-matcher-web-application.jar clojure.main -m people-matcher-web-application.core $PORT
+web: lein trampoline run -m people-matcher-web-application.core
