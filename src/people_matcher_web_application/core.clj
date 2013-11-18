@@ -5,16 +5,6 @@
         ring.adapter.jetty)
   (:require [people-matcher-web-application.routes.routes :as routes]))
 
-; (:require [compojure.route :as route]
-;            [compojure.handler :as handler]
-;            [shouter.controllers.shouts :as shouts]
-;            [shouter.views.layout :as layout])
-
-;(defn handler [request]
-;  {:status 200
-;   :headers {"Content-Type" "text/html"}
-;   :body "Hello World"})
-
 (defn handler [{{name "name"} :params}]
   (-> (response (routes/page name))
       (content-type "text/html")))
