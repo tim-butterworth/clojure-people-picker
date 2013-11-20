@@ -5,22 +5,25 @@
         ring.adapter.jetty)
   (:require [people-matcher-web-application.routes.routes :as routes]))
 
-(defn handler [{{name "name"} :params}]
-  (-> (response (routes/page name))
-      (content-type "text/html")))
+(defn handler [request-data]
+  (println request-data)
+  (let
+      [params (request-data :params)
+       password (params "password")
+       name (params "name")
+       uri (request-data :uri)]
+    (println params)
+    (println uri)
+  (-> (response (routes/page name password))
+      (content-type "text/html"))))
 
 (def app
   (-> handler wrap-params))
 
 (defn start [port]
-  (run-jetty handler {:port port :join? false}))
+  (run-jetty app {:port port :join? false}))
 
 (defn -main []
   (let [port (Integer/parseInt
-               (or (System/getenv "PORT") "3000"))]
-  (start port)))
-
-;(defn -main
-;  "I don't do a whole lot ... yet."
-;  [& args]
-;  (run-jetty handler {:port 3000}))
+              (or (System/getenv "PORT") "3000"))]
+    (start port)))
