@@ -14,6 +14,7 @@
        uri (request-data :uri)]
     (println params)
     (println uri)
+    (println (count (clojure.string/split uri #"\/")))
   (-> (response (routes/page name password))
       (content-type "text/html"))))
 
