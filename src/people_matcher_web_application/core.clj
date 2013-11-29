@@ -3,8 +3,13 @@
   (:use ring.middleware.params
         ring.util.response
         ring.adapter.jetty)
-  (:require [people-matcher-web-application.routes.routes :as routes]))
+  (:require [people-matcher-web-application.routes.routes :as routes])
+  (:require [people-matcher-web-application.dao.mongo-dao :as mongo-dao]))
 
+(defn find-route [uri]
+  (let [path (clojure.string/split uri #"\/")]
+  (println path)
+  (routes/home)))
 (defn handler [request-data]
   (println request-data)
   (let
@@ -12,10 +17,7 @@
        password (params "password")
        name (params "name")
        uri (request-data :uri)]
-    (println params)
-    (println uri)
-    (println (count (clojure.string/split uri #"\/")))
-  (-> (response (routes/page name password))
+  (-> (response (find-route uri))
       (content-type "text/html"))))
 
 (def app
