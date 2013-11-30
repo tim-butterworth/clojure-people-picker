@@ -13,7 +13,28 @@
               "<input type='submit'>"
               "</form>"))
        "</body></html>"))
-(defn register []
-  (str "<html><body>hi</body></html>"))
-(defn home []
-  (body-wrap "hi"))
+(defn register [params]
+  (body-wrap (clojure.string/join
+              #" "
+              ["register a new user"
+               "<form action='makenewuser' method='post'>"
+              "Name: <input name='name' type='text'>"
+              "Password: <input name='password' type='password'>"
+              "<input type='submit'>"
+               "</form>"])))
+(defn login [params]
+  (body-wrap "login page"))
+(defn home [params]
+  (body-wrap (clojure.string/join
+              #" "
+              ["<div>"
+               "<span>"
+               "<a href='/login'>login</a>"
+               "</span>"
+               "<br/>"
+               "<span>"
+               "<a href='/register'>register</a>"
+               "</span>"
+               "</div>"])))
+(defn new-user [n]
+  (body-wrap "new user has been created... maybe"))
