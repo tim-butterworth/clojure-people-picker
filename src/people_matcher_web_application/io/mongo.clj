@@ -6,24 +6,33 @@
   (let [hashed (clojure.string/join #"" [salt un pw])]
     (println hashed)
     hashed))
+(defn empty-str [s]
+  (if (or (= nil s) (= "" s))
+    true
+    false))
+(defn mongo-user-action [data action]
+  (println data action)
+  (dao/doAction data action :users))
+(defn printup [n]
+  (println (clojure.string/join #"" ["printup:" n]))
+  n)
+(defn to-result [n]
+  (if (empty-str n)
+    "success"
+    (printup n)))
+(defn save-new-user [un pw]
+  (let
+      [hashed (encrypt-hash un pw)
+       data {"userhash" hashed}
+       num-found (count (mongo-user-action data :find))]
+    (if (= 0 num-found)
+      (mongo-user-action data :insert)
+      "user already exists")))
 (defn new-user [params]
   (println params)
-  (println "making a new user")
   (let [username (params "name") password (params "password")]
     (if (and
-         (not (= nil name))
-         (not (= nil password)))
-      (let
-          [num-found
-           (count
-            (dao/doAction
-             {"userhash" (encrypt-hash username password)}
-             :find
-             :users))]
-        (if (= 0 num-found)
-          (dao/doAction
-           {"userhash" (encrypt-hash username password)}
-           :insert
-           :users)))
-                                        ;else do nothing
-      )))
+         (not (empty-str name))
+         (not (empty-str password)))
+      (let [result (to-result (save-new-user username password))]
+        (println (clojure.string/join #"" ["result: " result]))))))
