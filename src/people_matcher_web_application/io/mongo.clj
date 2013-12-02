@@ -29,10 +29,9 @@
       (mongo-user-action data :insert)
       "user already exists")))
 (defn new-user [params]
-  (println params)
   (let [username (params "name") password (params "password")]
     (if (and
          (not (empty-str name))
          (not (empty-str password)))
-      (let [result (to-result (save-new-user username password))]
-        (println (clojure.string/join #"" ["result: " result]))))))
+      (to-result (save-new-user username password))
+      "username or password are missing")))

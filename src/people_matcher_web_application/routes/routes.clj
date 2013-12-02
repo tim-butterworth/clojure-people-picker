@@ -37,4 +37,4 @@
                "</span>"
                "</div>"])))
 (defn new-user [n]
-  (body-wrap "new user has been created... maybe"))
+  (body-wrap (clojure.string/join #"" ["new user has been created... " n])))
