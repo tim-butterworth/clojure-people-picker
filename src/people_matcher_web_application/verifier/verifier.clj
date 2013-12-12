@@ -6,5 +6,7 @@
     true
     false))
 (defn user-created [r]
-  (println (clojure.string/join #" " ["user-created: " r]))
-  false)
+  (println (clojure.string/join #" " ["user-created? " r]))
+  (if (= nil (. r get "err"))
+    true
+    false))
