@@ -7,6 +7,7 @@
 (import com.mongodb.DBCollection)
 (import com.mongodb.DBCursor)
 (import com.mongodb.MongoClientURI)
+(import com.mongodb.WriteConcern)
 
 (def uri (new MongoClientURI (. System getenv "MONGOHQ_URL")))
 (def client (new MongoClient uri))
@@ -32,7 +33,7 @@
       (recur (conj rslt (. cursor next)))
       rslt)))
 (defn insert [data cllctn]
-    (. cllctn save (populate data)))
+    (. (. cllctn save (populate data) (. WriteConcern NORMAL)) getLastError))
 (defn findData [data cllctn]
   (let [cursor (. cllctn find (populate data))]
     (if (not (= nil cursor))
@@ -41,7 +42,7 @@
 (defn deleteData [data cllctn]
   (. cllctn remove (populate data)))
 
-(def cllcnt-mp {:users (. db getCollection "users")
+(def cllctn-mp {:users (. db getCollection "users")
                 :people (. db getCollection "people")
                 :restrictions (. db getCollection "restrictions")})
 (def fun-mp {:insert insert
@@ -49,4 +50,6 @@
              :delete deleteData})
 
 (defn doAction [data actionKey cllctnKey]
-  ((fun-mp actionKey) data (cllcnt-mp cllctnKey)))
+    ((fun-mp actionKey) data (cllctn-mp cllctnKey)))
+;code to create a unique index
+;(. (cllcnt-mp :users) ensureIndex (populate {"username" 1}) (populate {"unique" true}))

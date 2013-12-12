@@ -1,7 +1,7 @@
 (ns people-matcher-web-application.routes.routes)
 (defn body-wrap [body-text]
   (str "<html><body>"
-  body-text
+  (clojure.string/join #" " body-text)
   "</body></html>"))
 (defn page [name password]
   (str "<html><body>"
@@ -14,20 +14,16 @@
               "</form>"))
        "</body></html>"))
 (defn register [params]
-  (body-wrap (clojure.string/join
-              #" "
-              ["register a new user"
-               "<form action='makenewuser' method='post'>"
+  (body-wrap ["register a new user"
+               "<form action='register' method='post'>"
               "Name: <input name='name' type='text'>"
               "Password: <input name='password' type='password'>"
               "<input type='submit'>"
-               "</form>"])))
+               "</form>"]))
 (defn login [params]
-  (body-wrap "login page"))
+  (body-wrap ["login page" params]))
 (defn home [params]
-  (body-wrap (clojure.string/join
-              #" "
-              ["<div>"
+  (body-wrap ["<div>"
                "<span>"
                "<a href='/login'>login</a>"
                "</span>"
@@ -35,6 +31,6 @@
                "<span>"
                "<a href='/register'>register</a>"
                "</span>"
-               "</div>"])))
+               "</div>"]))
 (defn new-user [n]
   (body-wrap (clojure.string/join #"" ["new user has been created... " n])))

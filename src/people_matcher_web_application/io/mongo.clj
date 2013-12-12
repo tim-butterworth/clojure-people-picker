@@ -13,21 +13,15 @@
 (defn mongo-user-action [data action]
   (println data action)
   (dao/doAction data action :users))
-(defn printup [n]
-  (println (clojure.string/join #"" ["printup:" n]))
-  n)
 (defn to-result [n]
   (if (empty-str n)
     "success"
-    (printup n)))
+    n))
 (defn save-new-user [un pw]
   (let
       [hashed (encrypt-hash un pw)
-       data {"userhash" hashed}
-       num-found (count (mongo-user-action data :find))]
-    (if (= 0 num-found)
-      (mongo-user-action data :insert)
-      "user already exists")))
+       data {"username" un "userhash" hashed}]
+      (mongo-user-action data :insert)))
 (defn new-user [params]
   (let [username (params "name") password (params "password")]
     (if (and
