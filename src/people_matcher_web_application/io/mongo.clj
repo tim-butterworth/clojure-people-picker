@@ -13,19 +13,26 @@
 (defn mongo-user-action [data action]
   (println data action)
   (dao/doAction data action :users))
-(defn to-result [n]
-  (if (empty-str n)
-    "success"
-    n))
 (defn save-new-user [un pw]
   (let
       [hashed (encrypt-hash un pw)
        data {"username" un "userhash" hashed}]
       (mongo-user-action data :insert)))
+(defn lookup-user [un pw]
+  (let
+      [hashed (encrypt-hash un pw)
+       data {"username" un "userhash" hashed}]
+      (mongo-user-action data :find)))
 (defn new-user [params]
   (let [username (params "name") password (params "password")]
     (if (and
          (not (empty-str name))
          (not (empty-str password)))
-      (to-result (save-new-user username password))
+      (save-new-user username password)
       "username or password are missing")))
+(defn check-user [params]
+  (let [username (params "name") password (params "password")]
+    (if (and
+         (not (empty-str name))
+         (not (empty-str password)))
+      (lookup-user username password))))
