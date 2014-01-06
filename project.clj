@@ -9,8 +9,8 @@
                  [org.mongodb/mongo-java-driver "2.11.0"]
                  [hiccup "1.0.4"]]
   :profiles {:dev {:dependencies [[speclj "2.8.1"]]}}
-  :plugins [[speclj "2.8.1"]]
-  :test-paths ["spec"]
+  :plugins [[lein-ring "0.8.7"]]
+  :ring {:handler people-matcher-web-application.core/app}
   :main ^:skip-aot people-matcher-web-application.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

@@ -6,10 +6,6 @@
   (let [hashed (clojure.string/join #"" [salt un pw])]
     (println hashed)
     hashed))
-(defn empty-str [s]
-  (if (or (= nil s) (= "" s))
-    true
-    false))
 (defn mongo-user-action [data action]
   (println data action)
   (dao/doAction data action :users))
@@ -25,14 +21,7 @@
       (mongo-user-action data :find)))
 (defn new-user [params]
   (let [username (params "name") password (params "password")]
-    (if (and
-         (not (empty-str name))
-         (not (empty-str password)))
-      (save-new-user username password)
-      "username or password are missing")))
+      (save-new-user username password)))
 (defn check-user [params]
   (let [username (params "name") password (params "password")]
-    (if (and
-         (not (empty-str name))
-         (not (empty-str password)))
-      (lookup-user username password))))
+      (lookup-user username password)))

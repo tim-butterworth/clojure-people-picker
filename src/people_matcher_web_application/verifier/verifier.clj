@@ -7,6 +7,7 @@
     false))
 (defn user-created [r]
   (println (clojure.string/join #" " ["user-created? " r]))
+  (println (= nil (. r get "err")))
   (if (= nil (. r get "err"))
     true
     false))
@@ -14,19 +15,40 @@
   (if (= 0 (count r))
     false
     true))
-(defn print-return [v]
-  (println v)
-  v)
-(defn safe-get [mp keys]
-  (reduce
-   (fn [r k] (if (not (= nil r))
-               (r k)
-               nil))
-   mp
-   keys))
-(defn valid-cookie [c]
-  (println "cookie:")
-  (println c)
-  (if (= "true" (safe-get c ["loggedin" :value]))
+(defn safe-get [mp keys default]
+  (let [result
+       (reduce
+        (fn [r k] (if (not (= nil r))
+                    (r k)
+                    nil))
+        mp
+        keys)]
+    (if (= nil result)
+      default
+      result)))
+(defn valid-cookie [cookie]
+  (if
+      (>
+       (. Long valueOf (safe-get cookie ["people_picker_session" :value] 0))
+       (. System currentTimeMillis))
+    true
+    false))
+(defn empty-str [str]
+  (or
+   (= nil str)
+   (= "" (. str trim))))
+(defn param-validator-builder [param-mp]
+  (fn [params]
+    (assoc params :error-message
+     (clojure.string/join " "
+                          (filter
+                           (fn [n] (not (= nil n)))
+                           (map
+                            (fn [n] (if (empty-str (params n))
+                                      (clojure.string/join " " [n "was empty"])
+                                      nil))
+                            (keys param-mp)))))))
+(defn param-validator-evaluator [params]
+  (if (empty-str (params :error-message))
     true
     false))

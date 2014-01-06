@@ -16,7 +16,7 @@
 (defn register [params]
   (println params)
   (body-wrap
-   (form-wrap "new-user" "post"
+   (form-wrap "register" "post"
               [:div
                (input "Name:" "name" "text")
                [:br]
@@ -44,16 +44,20 @@
   (body-wrap [:div "you are now logged in noob..."
               [:br]
               (a "add-person" "add people") [:br]
-              (a "#" "view people") [:br]
+              (a "view-people" "view people") [:br]
               (a "#" "more stuff to do") [:br]
               (a "logout" "logout") [:br]]))
 (defn add-person [arg]
   (body-wrap [:div [:h1 "Add a person"]
               [:br]
-              (form-wrap "new-person" "post"
+              (form-wrap "add-person" "post"
                          [:div
                           (input "First Name:" "first name" "text")
                          [:br]
                          (input "Last Name:" "last name" "text")
                          [:br]
                          (input "Email:" "email" "text")])]))
+(defn error [msg]
+  (body-wrap [:div msg
+              [:br]
+              (a "home" "home")]))

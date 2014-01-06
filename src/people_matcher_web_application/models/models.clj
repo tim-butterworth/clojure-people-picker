@@ -1,6 +1,7 @@
 (ns people-matcher-web-application.models.models)
-(def login
-  {:username :text
-   :password :text})
-(def model-mp
-  {})
+(def login-params
+  {"name" :text
+   "password" :password})
+(def new-user-params
+  {"name" :text
+   "password" :password})
