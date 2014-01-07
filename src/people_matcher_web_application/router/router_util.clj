@@ -49,7 +49,7 @@
       (vec-compare crrnt in)
       false)))
 (defn find-match-in-list [lst uri method]
-  (println uri)
+;  (println uri)
   (reduce
    (fn [result n]
      (if (= nil result)

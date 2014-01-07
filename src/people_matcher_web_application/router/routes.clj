@@ -6,6 +6,8 @@
   (:require [people-matcher-web-application.verifier.verifier :as verifier])
   (:require [people-matcher-web-application.models.models :as models]))
 (defn add-cookie [cookie body]
+  (println "cookie")
+  (println cookie)
   (assoc body :cookies cookie))
 (defn get-params [request]
   (request :params))
@@ -35,8 +37,6 @@
      (fn [lst] (not (= 0 (count lst))))
      (mongo/check-user (get-params request)))))
 (defn login-home [request]
-  (println "login-home")
-  (println (mongo/check-user (get-params request)))
   (util/success-failure
    (try-logging-in request)
    (fn [req] (simple-body views/login req))
@@ -61,8 +61,8 @@
     (get-params request))))
 ;ADD PEOPLE
 (defn add-person [request]
-  (println request)
+  (println (request :cookies))
   (simple-body views/add-person request))
 (defn new-person [request]
-  (println request)
+  (println (request :cookies))
   (simple-body views/add-person request))
